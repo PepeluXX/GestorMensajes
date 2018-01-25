@@ -168,10 +168,11 @@ public class MuestraMensaje extends AppCompatActivity {
                 intent.putExtra("id_mensaje",id);
                 intent.putExtra("nombre_tabla",datos.getString("nombre_tabla"));
                 intent.putExtra("titulo",datos.getString("titulo"));
+                intent.putExtra("fragmento",datos.getString("fragmento"));
                 //Iniciar nueva actividad
                 startActivity(intent);
                 //Finalizar actividad actual
-                finish();
+                //finish();
 
             }
         });
@@ -187,6 +188,7 @@ public class MuestraMensaje extends AppCompatActivity {
                 //Insertar datos en el intento
                 intent.putExtra("nombre_tabla",datos.getString("nombre_tabla"));
                 intent.putExtra("id",String.valueOf(id));
+
                 //Comenzar nueva actividad
                 startActivity(intent);
 
@@ -230,11 +232,15 @@ public class MuestraMensaje extends AppCompatActivity {
         if(datos.getBoolean("desde_notificacion"))
         {
             intent.putExtra("fragmento","leidos");
+
+        }else if(datos.getBoolean("desde_categorizados")){
+            intent.putExtra("fragmento",datos.getString("fragmento"));
+            intent.putExtra("categoria",datos.getString("categoria"));
         }
-        else{//sabemos que está el dato con clave "fragmento" por lo tanto no habrá error al recogerlo
+        else {//sabemos que está el dato con clave "fragmento" por lo tanto no habrá error al recogerlo
             intent.putExtra("fragmento",datos.getString("fragmento"));
         }
-
+       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
 

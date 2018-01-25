@@ -1,7 +1,9 @@
 package com.example.lourdes.gestormensajes;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -59,6 +61,39 @@ public class ConfirmarBorradoCategoria extends Activity {
 
                 //Ejecutar consulta
                 db.delete("categorias",selection,selectionArgs);
+
+                //y desvinculamos los mensajes asociados a esa categoría
+                String RAW_QUERY = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN('android_metadata','tokens','categorias')";
+
+                Cursor cursor = db.rawQuery(RAW_QUERY,null);
+                cursor.moveToFirst();
+                ContentValues values = new ContentValues();
+                values.putNull("categoria");
+
+                for(int i=0;i<cursor.getCount();i++){
+
+                    //Definir parte WHERE de la consulta
+                    String selection2 =  "categoria LIKE ?";
+                    //Definir argumentos de la consulta
+                    String []selectionArgs2 = {categoria};
+                    //Ejecutar la consulta
+                    int count = db.update(
+                            "'"+cursor.getString(0)+"'",
+                            values,
+                            selection2,
+                            selectionArgs2);
+
+
+
+
+                   /* String nombre_tabla = cursor.getString(0);
+                    String RAW_QUERY2 = "update '"+ nombre_tabla+"' set categoria = null WHERE categoria ='"+categoria+"'";
+                    db.rawQuery(RAW_QUERY2,null);*/
+                    cursor.moveToNext();
+
+                }
+
+
                 //Crear intento para iniciar nueva actividad
                 Intent intent = new Intent(getApplicationContext(),BorrarCategorias.class);
                 //Cerrar la base de datos

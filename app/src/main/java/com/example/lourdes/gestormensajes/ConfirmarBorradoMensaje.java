@@ -3,6 +3,9 @@ package com.example.lourdes.gestormensajes;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,7 +21,7 @@ import java.util.List;
 * @version 1.0
 */
 
-public class ConfirmarBorradoMensaje extends Activity {
+public class ConfirmarBorradoMensaje extends AppCompatActivity {
 
     //Botones para aceptar o cancelar la operación
     Button borrado_mensaje_definitivo, cancela;
@@ -54,16 +57,20 @@ public class ConfirmarBorradoMensaje extends Activity {
                 db.delete(datos.getString("nombre_tabla"),selection,selectionArgs);
                 //Cerrar la conexión con la BBDD
                 db.close();
-                //Crear un intento para iniciar una nueva actividad
-                Intent intent = new Intent(getApplicationContext(), ListaMensajes.class);
-                //Insertar datos en el intento para que los use la actividad que se va a iniciar
-                intent.putExtra("nombre_tabla",datos.getString("nombre_tabla"));
-                //Comenzar nueva actividad
+              ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //Crear intento para iniciar una nueva actividad
+                Intent intent = new Intent(getApplicationContext(), ParaFragmentos.class);
+                //Añadir datos al intento para que los use la actividad que se va a iniciar
+
+                intent.putExtra("fragmento", datos.getString("fragmento"));
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //Comenzamos la nueva actividad
                 startActivity(intent);
-                //Finalizar actividad actual
+                //Finalizamos la actividad actual
                 finish();
-                //Indicar al usuario que el mensaje se borró
-                Toast.makeText(getApplicationContext(),"Se borró el mensaje",Toast.LENGTH_SHORT).show();
+
+
+             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         });
 

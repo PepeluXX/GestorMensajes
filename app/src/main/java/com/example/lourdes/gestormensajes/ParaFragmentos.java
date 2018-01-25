@@ -55,6 +55,9 @@ public class ParaFragmentos extends ListaMensajes {
         }
         else if(fragmento.equals("categ")){
             fragment = new CategorizadosFragment();
+            Bundle datos2 = new Bundle();
+            datos2.putString("categoria",datos.getString("categoria"));
+            fragment.setArguments(datos2);
         }
         else if(fragmento.equals("gen")){
             fragment = new GeneralFragment();
@@ -65,6 +68,20 @@ public class ParaFragmentos extends ListaMensajes {
             FragmentTransaction ft = fragmentManager.beginTransaction();
             ft.replace(R.id.screen_area, fragment);
             ft.commit();
+        }
+
+    }
+
+ @Override
+    public void onBackPressed() {
+
+        int count = getFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getFragmentManager().popBackStack();
         }
 
     }

@@ -86,6 +86,7 @@ public class GuardarEnCategoria extends Activity {
                         ContentValues values = new ContentValues();
                         values.put("categoria",valor );
 
+
                         //Definir que fila se va a actualizar
                         String selection = "id LIKE ?";
                         String[] selectionArgs = {datos.getString("id") };

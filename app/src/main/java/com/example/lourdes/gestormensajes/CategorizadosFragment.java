@@ -37,8 +37,8 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        String categoria = getArguments().getString("categoria");
-        Toast.makeText(getActivity(),"categoria = "+categoria,Toast.LENGTH_LONG).show();
+        final String categoria = getArguments().getString("categoria");
+        //Toast.makeText(getActivity(),"categoria = "+categoria,Toast.LENGTH_LONG).show();
         //Para conectar con la BBDD
         BDDHelper miHelper = new BDDHelper(getActivity());
 
@@ -189,6 +189,8 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                             intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
                             intent.putExtra("id_mensaje", boton.getId());
                             intent.putExtra("fragmento", "categ");
+                            intent.putExtra("categoria",categoria);
+                            intent.putExtra("desde_categorizados",true);
                             //Comenzamos la nueva actividad
                             startActivity(intent);
                             //Finalizamos la actividad actual
@@ -221,9 +223,6 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                     });
 
 
-
-
-
                     //Añadimos a los layout
                     //elementos al layout_fila
                     layout_fila.addView(boton);
@@ -245,13 +244,18 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
 
         }else{
             TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
-            no_mensajes.setText("No hay tiene mensajes en esta categoría.");
+            no_mensajes.setText("No hay tiene mensajes en la categoria "+categoria);
             no_mensajes.setTextSize(20);
             no_mensajes.setPadding(20,20,0,0);
         }
     }
 
+    /*@Override
+    public void onDetach() {
+        super.onDetach();
 
+
+    }*/
 
 
 

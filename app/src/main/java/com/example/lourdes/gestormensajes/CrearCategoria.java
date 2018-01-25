@@ -147,9 +147,9 @@ public class CrearCategoria extends AppCompatActivity  {
     //Método para definir que ocurre cuando se pulse el botón "Atrás" en el dispositivo
     public void onBackPressed() {
         //Crear intento para comenzar nueva actividad
-        Intent intent = new Intent(this,ListaMensajes.class);
+        //Intent intent = new Intent(this,ListaMensajes.class);
         //Comenzar nueva actividad
-        startActivity(intent);
+       // startActivity(intent);
         //Terminar actividad actual
         finish();
         //Llamar al metodo de la clase de la que se hereda

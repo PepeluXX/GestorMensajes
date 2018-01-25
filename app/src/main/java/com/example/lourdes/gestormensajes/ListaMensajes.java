@@ -140,6 +140,7 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
       } else {
           super.onBackPressed();
       }
+
   }
 
     @Override
@@ -192,7 +193,7 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
         if(fragment!=null){
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.screen_area,fragment)/*.addToBackStack("my_fragment")*/;
+            ft.replace(R.id.screen_area,fragment).addToBackStack(null);
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

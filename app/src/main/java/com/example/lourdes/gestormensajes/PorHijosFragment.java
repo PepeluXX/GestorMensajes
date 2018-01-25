@@ -32,6 +32,9 @@ public class PorHijosFragment extends Fragment {
 
 
     String categoria = null;
+    //para controlar el caso en que sí hay mensajes para hijos, pero están categorizados, se muestre también el mensaje de
+    //no hay mensajes para hijos
+    int cuenta=0;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,13 +63,6 @@ public class PorHijosFragment extends Fragment {
             Log.d("size_array ", "" + checker.size());
             cursor_check.moveToNext();
         }
-
-
-
-
-
-
-
 
 
 
@@ -112,12 +108,14 @@ public class PorHijosFragment extends Fragment {
                     //Creamos elementos dinámicamente, uno para cada mensaje que haya en la tabla correspondiente
                     for (int j = 0; j < cursor2.getCount(); j++) {
 
+
                         if(cursor2.getCount()>0) {
                             categoria = cursor2.getString(6);
                             Log.d("categoria", "" + categoria);
                         }
                         if (categoria == null) {
 
+                            cuenta =1;
 
                             // Crear LinearLayout layout_fila que albergará los elementos
                             LinearLayout layout_fila = new LinearLayout(getActivity());
@@ -226,7 +224,7 @@ public class PorHijosFragment extends Fragment {
                                     //Comenzamos la nueva actividad
                                     startActivity(intent);
                                     //Finalizamos la actividad actual
-                                    //getActivity().finish();
+                                    getActivity().finish();
 
                                 }
                             });
@@ -250,6 +248,12 @@ public class PorHijosFragment extends Fragment {
 
                     }//END FOR MENSAJE
 
+              /*  if(cuenta!=0){
+                    TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
+                    no_mensajes.setText("No hay mensajes en categoría hijos");
+                    no_mensajes.setTextSize(20);
+                    no_mensajes.setPadding(20,20,0,0);
+                }*/
                 cursor.moveToNext();
             }//END FOR TABLA
 
@@ -263,6 +267,7 @@ public class PorHijosFragment extends Fragment {
             no_mensajes.setTextSize(20);
             no_mensajes.setPadding(20,20,0,0);
         }
+
     }
 
 
