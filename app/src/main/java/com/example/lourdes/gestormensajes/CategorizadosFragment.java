@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,20 +37,24 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        String categoria = getArguments().getString("categoria");
+        Toast.makeText(getActivity(),"categoria = "+categoria,Toast.LENGTH_LONG).show();
         //Para conectar con la BBDD
         BDDHelper miHelper = new BDDHelper(getActivity());
+
 
         //Comprobar si hay mensajes del tipo seleccionado
 
         SQLiteDatabase db3 = miHelper.getReadableDatabase();
-        String RAW_QUERY3 = "SELECT name FROM sqlite_master WHERE type='table' and name like('hijo%')";
+        String RAW_QUERY3 = "SELECT name FROM sqlite_master WHERE type='table' AND name NOT IN('android_metadata','tokens','categorias')";
         Cursor cursor_check = db3.rawQuery(RAW_QUERY3, null);
         cursor_check.moveToFirst();
         ArrayList<String> checker = new ArrayList<String>();
 
+        //comprobar si hay mensajes de esa categoría en alguna tabla
         for (int i = 0; i < cursor_check.getCount(); i++) {
             String check_tabla = cursor_check.getString(0);
-            String CHECK_QUERY = "SELECT autor FROM '" + check_tabla + "'";
+            String CHECK_QUERY = "SELECT autor FROM '" + check_tabla + "' WHERE categoria ='"+categoria+"'";
             Cursor cursor_autor = db3.rawQuery(CHECK_QUERY, null);
 
 
@@ -91,7 +98,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                 //Coger los mensajes de la primera tabla
                 final String nombre_tabla = cursor.getString(0);
 
-                String RAW_QUERY_2 = "SELECT id,autor,fecha,titulo,mensaje,leido,categoria FROM '" + nombre_tabla + "' WHERE categoria != ''";
+                String RAW_QUERY_2 = "SELECT id,autor,fecha,titulo,mensaje,leido FROM '" + nombre_tabla + "' WHERE categoria = '"+categoria+"'";
 
                 final Cursor cursor2 = db.rawQuery(RAW_QUERY_2, null);
                 cursor2.moveToFirst();
@@ -163,7 +170,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                     // curso = curso.replace("_", " ");
                     boton.setText(cursor2.getString(3)
                             + "\n- " + fecha
-                            + "\n- " + "Categoría: " + cursor2.getString(6));
+                            + "\n- " + "Categoría: " + categoria);
                     boton.setBackgroundColor(getResources().getColor(R.color.fondo_layout_fila_curso));
                     boton_borrar.setImageResource(R.mipmap.ic_borra_categorizados);
                     imagen.setImageResource(R.mipmap.ic_categorizados);
@@ -214,7 +221,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                     });
 
 
-                    //definimos parámetros para cada tipo de mensa
+
 
 
                     //Añadimos a los layout
@@ -238,7 +245,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
 
         }else{
             TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
-            no_mensajes.setText("No hay tiene mensajes categorizados.");
+            no_mensajes.setText("No hay tiene mensajes en esta categoría.");
             no_mensajes.setTextSize(20);
             no_mensajes.setPadding(20,20,0,0);
         }
@@ -251,8 +258,12 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
         return inflater.inflate(R.layout.activity_categorizados_fragment,null);
     }
+
+
 
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.

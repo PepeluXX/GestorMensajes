@@ -182,7 +182,7 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
         } else if (id == R.id.nav_todos_leidos) {
             fragment= new TodosLeidosFragment();
         } else if (id == R.id.nav_categorizados) {
-            fragment= new CategorizadosFragment();
+            fragment= new ElegirCategoriaFragment();
         }else if(id==R.id.nav_general){
             fragment = new GeneralFragment();
         }else if(id==R.id.nav_acerca_de){

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 public class PorCursosFragment extends Fragment {
 
 
+    String categoria = null;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -102,146 +103,158 @@ public class PorCursosFragment extends Fragment {
             final String nombre_tabla = cursor.getString(0);
             Log.d("NOMBRE_TABLA", nombre_tabla);
 
-            if (nombre_tabla.startsWith("curso")) {
+
 
                 String RAW_QUERY_2 = "SELECT id,autor,fecha,titulo,mensaje,leido,categoria FROM '" + nombre_tabla + "'";
 
                 final Cursor cursor2 = db.rawQuery(RAW_QUERY_2, null);
+
                 cursor2.moveToFirst();
-                //Log.d("categoria",cursor2.getString(1));
-
-                //Creamos elementos dinámicamente, uno para cada mensaje que haya en la tabla correspondiente
-                for (int j = 0; j < cursor2.getCount(); j++) {
 
 
-                    // Crear LinearLayout layout_fila que albergará los elementos
-                    LinearLayout layout_fila = new LinearLayout(getActivity());
-                    //parámetros del layout fila
-                    LinearLayout.LayoutParams param_layout_fila = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    param_layout_fila.height = 230;
-                    layout_fila.setOrientation(LinearLayout.HORIZONTAL);
+                        //Creamos elementos dinámicamente, uno para cada mensaje que haya en la tabla correspondiente
+                        for (int j = 0; j < cursor2.getCount(); j++) {
+                            //comprobamos que el mensaje no está categorizado
+
+                            if(cursor2.getCount()>0) {
+                                 categoria = cursor2.getString(6);
+                                Log.d("categoria", "" + categoria);
+                            }
 
 
-                    //CREAMOS EL BOTÓN
-                    final Button boton = new Button(getActivity());
-                    //le damos parámetros comunes a todos los botones, independientes del tipo de mensaje
-                    LinearLayout.LayoutParams param_layout_boton = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    param_layout_boton.weight = 4;
-                    param_layout_boton.width = convertDpToPixel(300, getActivity());
-                    boton.setLayoutParams(param_layout_boton);
-                    boton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-                    boton.setGravity(0);
-                    boton.setPadding(20, 20, 0, 20);
-                    boton.setTypeface(null, Typeface.ITALIC);
-                    boton.setId(cursor2.getInt(0));
+                            if (categoria == null) {
 
-                    //lo configuramos dependiendo de leído o no
-                    if (cursor2.getInt(5) == 0) {
-                        //Si el mensaje no se ha leído aún, el texto se pone en negrita
-                        boton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorTextoTituloNoLeido));
-                        boton.setTypeface(null, Typeface.BOLD_ITALIC);
-                    }
-
-                    //CREAMOS EL IMAGE VIEW
-                    final ImageView imagen = new ImageView(getActivity());
-                    //creamos parámetros comunes a cada image view imagen
-                    LinearLayout.LayoutParams param_layout_imagen = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    param_layout_imagen.weight = 1;
-                    imagen.setLayoutParams(param_layout_imagen);
-                    imagen.setPadding(0, 0, 0, 0);
-
-                    //CREAMOS EL BOTÓN PAPELERA
-                    final ImageButton boton_borrar = new ImageButton(getActivity());
-                    LinearLayout.LayoutParams param_layout_boton_borrar = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                    param_layout_boton_borrar.weight = 1;
-                    boton_borrar.setLayoutParams(param_layout_boton_borrar);
-                    boton_borrar.setId(cursor2.getInt(0));
+                                // Crear LinearLayout layout_fila que albergará los elementos
+                                LinearLayout layout_fila = new LinearLayout(getActivity());
+                                //parámetros del layout fila
+                                LinearLayout.LayoutParams param_layout_fila = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                                param_layout_fila.height = 230;
+                                layout_fila.setOrientation(LinearLayout.HORIZONTAL);
 
 
-                    //configuramos parámetros dependientes del tipo de mensaje
+                                //CREAMOS EL BOTÓN
+                                final Button boton = new Button(getActivity());
+                                //le damos parámetros comunes a todos los botones, independientes del tipo de mensaje
+                                LinearLayout.LayoutParams param_layout_boton = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                                param_layout_boton.weight = 4;
+                                param_layout_boton.width = convertDpToPixel(300, getActivity());
+                                boton.setLayoutParams(param_layout_boton);
+                                boton.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                                boton.setGravity(0);
+                                boton.setPadding(20, 20, 0, 20);
+                                boton.setTypeface(null, Typeface.ITALIC);
+                                boton.setId(cursor2.getInt(0));
 
-                    String tipo_tabla = nombre_tabla.substring(0, 3);
-                    String fecha = cursor2.getString(2);
-                    fecha = fecha.substring(0, 10);
+                                //lo configuramos dependiendo de leído o no
+                                if (cursor2.getInt(5) == 0) {
+                                    //Si el mensaje no se ha leído aún, el texto se pone en negrita
+                                    boton.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorTextoTituloNoLeido));
+                                    boton.setTypeface(null, Typeface.BOLD_ITALIC);
+                                }
 
+                                //CREAMOS EL IMAGE VIEW
+                                final ImageView imagen = new ImageView(getActivity());
+                                //creamos parámetros comunes a cada image view imagen
+                                LinearLayout.LayoutParams param_layout_imagen = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                                param_layout_imagen.weight = 1;
+                                imagen.setLayoutParams(param_layout_imagen);
+                                imagen.setPadding(0, 0, 0, 0);
 
-                    layout_fila.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.fondo_layout_fila_curso));
-
-                    String curso = nombre_tabla.substring(nombre_tabla.indexOf("-") + 1, nombre_tabla.indexOf("!"));
-                    curso = curso.replace("_", " ");
-                    boton.setText(cursor2.getString(3)
-                            + "\n- " + fecha
-                            + "\n- " + curso);
-                    boton.setBackgroundColor(getResources().getColor(R.color.fondo_layout_fila_curso));
-                    boton_borrar.setImageResource(R.mipmap.ic_borrar);
-                    imagen.setImageResource(R.mipmap.ic_curso);
-
-
-                    // Se pone el boton principal a la escucha de ser pulsado
-                    boton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-
-                            String titulo = boton.getText().toString();
-                            titulo = titulo.substring(0, titulo.indexOf("\n"));
-                            //Crear intento para iniciar una nueva actividad
-                            Intent intent = new Intent(getActivity(), MuestraMensaje.class);
-                            //Añadir datos al intento para que los use la actividad que se va a iniciar
-                            intent.putExtra("titulo", titulo);
-                            intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
-                            intent.putExtra("id_mensaje", boton.getId());
-                            intent.putExtra("fragmento", "curso");
-                            //Comenzamos la nueva actividad
-                            startActivity(intent);
-                            //Finalizamos la actividad actual
-                            getActivity().finish();
-
-                        }
-                    });
+                                //CREAMOS EL BOTÓN PAPELERA
+                                final ImageButton boton_borrar = new ImageButton(getActivity());
+                                LinearLayout.LayoutParams param_layout_boton_borrar = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                                param_layout_boton_borrar.weight = 1;
+                                boton_borrar.setLayoutParams(param_layout_boton_borrar);
+                                boton_borrar.setId(cursor2.getInt(0));
 
 
-                    //se pone el boton borrar a la escucha de ser pulsado
+                                //configuramos parámetros dependientes del tipo de mensaje
 
-                    boton_borrar.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-
-                            String titulo = boton.getText().toString();
-                            titulo = titulo.substring(0, titulo.indexOf("\n"));
-                            //Crear intento para iniciar una nueva actividad
-                            Intent intent = new Intent(getActivity(), ConfirmarBorradoMensaje.class);
-                            //Añadir datos al intento para que los use la actividad que se va a iniciar
-                            intent.putExtra("titulo", titulo);
-                            intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
-                            intent.putExtra("id_mensaje", boton_borrar.getId());
-                            intent.putExtra("fragmento", "curso");
-                            //Comenzamos la nueva actividad
-                            startActivity(intent);
-                            //Finalizamos la actividad actual
-                            // getActivity().finish();
-
-                        }
-                    });
+                                String tipo_tabla = nombre_tabla.substring(0, 3);
+                                String fecha = cursor2.getString(2);
+                                fecha = fecha.substring(0, 10);
 
 
-                    //definimos parámetros para cada tipo de mensa
+                                layout_fila.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.fondo_layout_fila_curso));
+
+                                String curso = nombre_tabla.substring(nombre_tabla.indexOf("-") + 1, nombre_tabla.indexOf("!"));
+                                curso = curso.replace("_", " ");
+                                boton.setText(cursor2.getString(3)
+                                        + "\n- " + fecha
+                                        + "\n- " + curso);
+                                boton.setBackgroundColor(getResources().getColor(R.color.fondo_layout_fila_curso));
+                                boton_borrar.setImageResource(R.mipmap.ic_borrar);
+                                imagen.setImageResource(R.mipmap.ic_curso);
 
 
-                    //Añadimos a los layout
-                    //elementos al layout_fila
-                    layout_fila.addView(boton);
-                    layout_fila.addView(imagen);
-                    layout_fila.addView(boton_borrar);
+                                // Se pone el boton principal a la escucha de ser pulsado
+                                boton.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View v) {
 
-                    //y la fila al layout principal
-                    layout_principal.addView(layout_fila);
+                                        String titulo = boton.getText().toString();
+                                        titulo = titulo.substring(0, titulo.indexOf("\n"));
+                                        //Crear intento para iniciar una nueva actividad
+                                        Intent intent = new Intent(getActivity(), MuestraMensaje.class);
+                                        //Añadir datos al intento para que los use la actividad que se va a iniciar
+                                        intent.putExtra("titulo", titulo);
+                                        intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
+                                        intent.putExtra("id_mensaje", boton.getId());
+                                        intent.putExtra("fragmento", "curso");
+                                        //Comenzamos la nueva actividad
+                                        startActivity(intent);
+                                        //Finalizamos la actividad actual
+                                        getActivity().finish();
 
-                    cursor2.moveToNext();
-                }//END FOR MENSAJE
+                                    }
+                                });
 
-            }//END IF
+
+                                //se pone el boton borrar a la escucha de ser pulsado
+
+                                boton_borrar.setOnClickListener(new View.OnClickListener() {
+                                    public void onClick(View v) {
+
+                                        String titulo = boton.getText().toString();
+                                        titulo = titulo.substring(0, titulo.indexOf("\n"));
+                                        //Crear intento para iniciar una nueva actividad
+                                        Intent intent = new Intent(getActivity(), ConfirmarBorradoMensaje.class);
+                                        //Añadir datos al intento para que los use la actividad que se va a iniciar
+                                        intent.putExtra("titulo", titulo);
+                                        intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
+                                        intent.putExtra("id_mensaje", boton_borrar.getId());
+                                        intent.putExtra("fragmento", "curso");
+                                        //Comenzamos la nueva actividad
+                                        startActivity(intent);
+                                        //Finalizamos la actividad actual
+                                        // getActivity().finish();
+
+                                    }
+                                });
+
+
+                                //definimos parámetros para cada tipo de mensa
+
+
+                                //Añadimos a los layout
+                                //elementos al layout_fila
+                                layout_fila.addView(boton);
+                                layout_fila.addView(imagen);
+                                layout_fila.addView(boton_borrar);
+
+                                //y la fila al layout principal
+                                layout_principal.addView(layout_fila);
+
+                            }//end if(categoria == null)
+
+                            cursor2.moveToNext();
+                        }//END FOR MENSAJE
+
+
+
             cursor.moveToNext();
         }//END FOR TABLA
 

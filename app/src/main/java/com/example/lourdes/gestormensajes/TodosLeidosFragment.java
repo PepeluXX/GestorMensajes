@@ -40,7 +40,7 @@ public class TodosLeidosFragment extends Fragment {
         //Comprobar si hay mensajes del tipo seleccionado
 
         SQLiteDatabase db3 = miHelper.getReadableDatabase();
-        String RAW_QUERY3 = "SELECT name FROM sqlite_master WHERE type='table' and name and name not in('tokens','categorias','android_metadata')";
+        String RAW_QUERY3 = "SELECT name FROM sqlite_master WHERE type='table' and name not in('tokens','categorias','android_metadata')";
         Cursor cursor_check = db3.rawQuery(RAW_QUERY3, null);
         cursor_check.moveToFirst();
         ArrayList<String> checker = new ArrayList<String>();
