@@ -142,7 +142,7 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
                          nombre_tabla="General";
                     }
                     nombres_tablas.add(nombre_tabla);
-                    //break;
+                    break;
                 }
                 cursor2.moveToNext();
             }
