@@ -63,6 +63,7 @@ public class ConfirmarBorradoMensaje extends AppCompatActivity {
                 //Añadir datos al intento para que los use la actividad que se va a iniciar
 
                 intent.putExtra("fragmento", datos.getString("fragmento"));
+                intent.putExtra("categoria",datos.getString("categoria"));
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 //Comenzamos la nueva actividad
                 startActivity(intent);

@@ -97,6 +97,8 @@ public class CrearCategoria extends AppCompatActivity  {
 
                             Toast.makeText(getApplicationContext(), "Se Creó la categoria: " +
                                     nombre_categoria.getText().toString(), Toast.LENGTH_LONG).show();
+
+                            //TODO:  HACER QUE VUELVA A ELEGIRCATEGORIASFRAGMENT
                         } else {
                             Toast.makeText(getApplicationContext(), "La categoría ya existe", Toast.LENGTH_SHORT).show();
                         }

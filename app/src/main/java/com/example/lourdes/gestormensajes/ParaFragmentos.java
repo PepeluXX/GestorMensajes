@@ -65,8 +65,9 @@ public class ParaFragmentos extends ListaMensajes {
 
         if(fragment!=null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack("root_fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.screen_area, fragment);
+            ft.replace(R.id.screen_area, fragment).addToBackStack("root_fragment");
             ft.commit();
         }
 

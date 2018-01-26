@@ -30,6 +30,8 @@ import java.util.ArrayList;
 
 public class TodosLeidosFragment extends Fragment {
 
+    String categoria = null;
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -91,7 +93,7 @@ public class TodosLeidosFragment extends Fragment {
                 //Coger los mensajes de la primera tabla
                 final String nombre_tabla = cursor.getString(0);
 
-                String RAW_QUERY_2 = "SELECT id,autor,fecha,titulo,mensaje FROM '" + nombre_tabla + "' WHERE leido=1";
+                String RAW_QUERY_2 = "SELECT id,autor,fecha,titulo,mensaje,categoria FROM '" + nombre_tabla + "' WHERE leido=1";
 
                 final Cursor cursor2 = db.rawQuery(RAW_QUERY_2, null);
                 cursor2.moveToFirst();
@@ -131,6 +133,7 @@ public class TodosLeidosFragment extends Fragment {
                             LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                     param_layout_imagen.weight = 1;
                     imagen.setLayoutParams(param_layout_imagen);
+
                     imagen.setPadding(0, 0, 0, 0);
 
                     //CREAMOS EL BOTÓN PAPELERA
@@ -147,6 +150,13 @@ public class TodosLeidosFragment extends Fragment {
                     String tipo_tabla = nombre_tabla.substring(0, 3);
                     String fecha = cursor2.getString(2);
                     fecha = fecha.substring(0, 10);
+
+                    if(cursor2.getCount()>0) {
+                        categoria = cursor2.getString(5);
+                        Log.d("categoria", "" + categoria);
+                    }
+
+                    if(categoria==null){
 
                     switch (tipo_tabla) {
 
@@ -187,6 +197,16 @@ public class TodosLeidosFragment extends Fragment {
                             boton_borrar.setImageResource(R.mipmap.ic_borrar_general);
                             break;
 
+
+                     }
+                    }else{
+                        layout_fila.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.fondo_layout_fila_categorizados));
+                        boton.setText(cursor2.getString(3)
+                                + "\n- " + fecha
+                                + "\n- Categoria: "+cursor2.getString(5));
+                        boton.setBackgroundColor(getResources().getColor(R.color.fondo_layout_fila_categorizados));
+                        imagen.setImageResource(R.mipmap.ic_categorizados);
+                        boton_borrar.setImageResource(R.mipmap.ic_borra_categorizados);
 
                     }
 

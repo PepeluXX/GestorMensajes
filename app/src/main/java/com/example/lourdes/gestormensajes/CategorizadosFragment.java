@@ -214,6 +214,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
                             intent.putExtra("nombre_tabla", "'" + nombre_tabla + "'");
                             intent.putExtra("id_mensaje", boton_borrar.getId());
                             intent.putExtra("fragmento", "categ");
+                            intent.putExtra("categoria",categoria);
                             //Comenzamos la nueva actividad
                             startActivity(intent);
                             //Finalizamos la actividad actual
@@ -244,7 +245,7 @@ public class CategorizadosFragment extends android.support.v4.app.Fragment {
 
         }else{
             TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
-            no_mensajes.setText("No hay tiene mensajes en la categoria "+categoria);
+            no_mensajes.setText("No tiene mensajes en la categoria "+categoria);
             no_mensajes.setTextSize(20);
             no_mensajes.setPadding(20,20,0,0);
         }

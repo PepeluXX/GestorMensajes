@@ -33,6 +33,7 @@ public class PorCursosFragment extends Fragment {
 
 
     String categoria = null;
+    int cuenta=0;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -123,6 +124,8 @@ public class PorCursosFragment extends Fragment {
 
 
                             if (categoria == null) {
+
+                                cuenta = 1;
 
                                 // Crear LinearLayout layout_fila que albergará los elementos
                                 LinearLayout layout_fila = new LinearLayout(getActivity());
@@ -256,8 +259,13 @@ public class PorCursosFragment extends Fragment {
 
 
             cursor.moveToNext();
-        }//END FOR TABLA
-
+             }//END FOR TABLA
+            if(cuenta==0 ){
+                TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
+                no_mensajes.setText("Los mensajes actuales por curso han sido añadidos a alguna categoría propia.");
+                no_mensajes.setTextSize(20);
+                no_mensajes.setPadding(20,30,0,0);
+            }
 
         //Cerrar conexión con la BBDD
         db.close();
@@ -266,7 +274,7 @@ public class PorCursosFragment extends Fragment {
         TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
         no_mensajes.setText("No hay mensajes para en categoría cursos.");
         no_mensajes.setTextSize(20);
-        no_mensajes.setPadding(20,20,0,0);
+        no_mensajes.setPadding(20,30,0,0);
     }
 
     }

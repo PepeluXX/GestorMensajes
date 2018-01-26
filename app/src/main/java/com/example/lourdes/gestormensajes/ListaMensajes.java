@@ -57,6 +57,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.api.Scope;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 
 /*
@@ -78,7 +79,7 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_mensajes);
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,7 +104,71 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+       /* TextView texto5 = (TextView)findViewById(R.id.texto_tiene_mensajes);
+        texto5.setText("dinga??");*/
+        TextView texto = (TextView)findViewById(R.id.texto_tiene_mensajes);
+        TextView texto2 = (TextView)findViewById(R.id.texto_tiene_mensajes_continuacion);
+        texto.setPadding(20,20,5,5);
+        texto2.setPadding(20,20,5,5);
+        //Para conectar con la BBDD
+        BDDHelper miHelper = new BDDHelper(this);
+
+        //Comprobar si hay mensajes del tipo seleccionado
+
+        SQLiteDatabase db = miHelper.getReadableDatabase();
+        String RAW_QUERY = "SELECT name FROM sqlite_master WHERE type='table' and name not in('tokens','categorias','android_metadata')";
+        Cursor cursor = db.rawQuery(RAW_QUERY, null);
+        cursor.moveToFirst();
+
+        ArrayList<String> nombres_tablas = new ArrayList<>();
+
+        for(int i=0;i<cursor.getCount();i++){
+
+            String RAW_QUERY_2= "SELECT leido FROM '"+cursor.getString(0)+"' ";
+            Cursor cursor2 = db.rawQuery(RAW_QUERY_2,null);
+            cursor2.moveToFirst();
+
+            String nombre_tabla="";
+
+            for(int j=0;j<cursor2.getCount();j++){
+                Log.d("getInt",""+cursor2.getInt(0));
+                if(cursor2.getInt(0)==0){
+                    if(cursor.getString(0).startsWith("curso")){
+                       nombre_tabla = cursor.getString(0).substring(6,cursor.getString(0).length()).replace("_"," ".replace("!",""));
+                    }else if(cursor.getString(0).startsWith("hijo")){
+                        nombre_tabla = cursor.getString(0).substring(5,cursor.getString(0).length()).replace("_"," ").replace("!","");
+                    }else{
+                         nombre_tabla="General";
+                    }
+                    nombres_tablas.add(nombre_tabla);
+                    //break;
+                }
+                cursor2.moveToNext();
+            }
+            cursor.moveToNext();
+        }
+
+
+        if(nombres_tablas.size()>0){
+
+            texto.setText("\n-----Tiene mensajes sin leer de:----");
+
+
+            String para = "";
+            for(int ii=0;ii<nombres_tablas.size();ii++){
+                para = para +nombres_tablas.get(ii)+".\n\n ";
+            }
+            para=para.substring(0,para.length()-1);
+            para=para.replace("_"," ");
+            para=para.replace("!","");
+            texto2.setText(para);
+
+        }
+        db.close();
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -192,8 +257,9 @@ public class ListaMensajes extends AppCompatActivity implements NavigationView.O
 
         if(fragment!=null){
             FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.popBackStack("root_fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.replace(R.id.screen_area,fragment).addToBackStack(null);
+            ft.replace(R.id.screen_area,fragment).addToBackStack("root_fragment");
             ft.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class GeneralFragment extends android.support.v4.app.Fragment {
 
     String categoria = null;
+    int cuenta =0;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -109,6 +110,7 @@ public class GeneralFragment extends android.support.v4.app.Fragment {
                     }
                     if (categoria == null) {
 
+                        cuenta = 1;
                         // Crear LinearLayout layout_fila que albergará los elementos
                         LinearLayout layout_fila = new LinearLayout(getActivity());
                         //parámetros del layout fila
@@ -237,11 +239,15 @@ public class GeneralFragment extends android.support.v4.app.Fragment {
                         cursor2.moveToNext();
                     }//END FOR MENSAJE
 
+                 cursor.moveToNext();
+                }//END FOR TABLA
 
-
-                cursor.moveToNext();
-            }//END FOR TABLA
-
+            if(cuenta==0 ){
+                TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
+                no_mensajes.setText("Los mensajes actuales de caracter general han sido añadidos a alguna categoría propia.");
+                no_mensajes.setTextSize(20);
+                no_mensajes.setPadding(20,30,0,0);
+            }
 
             //Cerrar conexión con la BBDD
             db.close();

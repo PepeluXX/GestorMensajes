@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class PorHijosFragment extends Fragment {
     String categoria = null;
     //para controlar el caso en que sí hay mensajes para hijos, pero están categorizados, se muestre también el mensaje de
     //no hay mensajes para hijos
-    int cuenta=0;
+     int cuenta=0;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,6 +60,7 @@ public class PorHijosFragment extends Fragment {
             if (cursor_autor.getCount() != 0) {
                 cursor_autor.moveToFirst();
                 checker.add(cursor_autor.getString(0));
+                //break;??
             }
             Log.d("size_array ", "" + checker.size());
             cursor_check.moveToNext();
@@ -66,7 +68,7 @@ public class PorHijosFragment extends Fragment {
 
 
 
-
+        //si hay mensajes en las tablas hijos
         if(checker.size()>0) {
 
             //Definir layout principal, , y definir parámetros del layout
@@ -248,24 +250,25 @@ public class PorHijosFragment extends Fragment {
 
                     }//END FOR MENSAJE
 
-              /*  if(cuenta!=0){
-                    TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
-                    no_mensajes.setText("No hay mensajes en categoría hijos");
-                    no_mensajes.setTextSize(20);
-                    no_mensajes.setPadding(20,20,0,0);
-                }*/
+
                 cursor.moveToNext();
             }//END FOR TABLA
 
-
+            if(cuenta==0 ){
+                TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
+                no_mensajes.setText("Los mensajes actuales para hijo/a han sido añadidos a alguna categoría propia.");
+                no_mensajes.setTextSize(20);
+                no_mensajes.setPadding(20,30,0,0);
+            }
             //Cerrar conexión con la BBDD
             db.close();
 
-        }else{
+        }//end if(checker > 0)
+        else{
             TextView no_mensajes = (TextView)getActivity().findViewById(R.id.texto_no_mensajes);
             no_mensajes.setText("No hay mensajes en categoría hijos");
             no_mensajes.setTextSize(20);
-            no_mensajes.setPadding(20,20,0,0);
+            no_mensajes.setPadding(20,30,0,0);
         }
 
     }
